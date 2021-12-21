@@ -159,6 +159,44 @@ def page_two():
     submit_button = driver.find_element_by_xpath ('//*[@id="btnPay"]')
     submit_button.click()
 
+def page_three():
+  driver.switch_to.frame(WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.CLASS_NAME, "paymtiframe"))))
+  driver.switch_to.frame(WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.CLASS_NAME, "razorpay-checkout-frame"))))
+
+  # Phone
+  try :
+    WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="contact"]')))
+  except TimeoutException:
+    timeout_exception = True
+    timeout_exception1 = True
+  else :
+    timeout_exception = False
+    page_button = driver.find_element_by_xpath ('//*[@id="contact"]')
+    page_button.send_keys(settings_data['registered_mobile_no'])
+
+  # Email
+  try :
+    WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="email"]')))
+  except TimeoutException:
+    timeout_exception = True
+    timeout_exception1 = True
+  else :
+    timeout_exception = False
+    page_button = driver.find_element_by_xpath ('//*[@id="email"]')
+    page_button.send_keys(settings_data['email_id'])
+  
+  # Proceed Button
+  try :
+    WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="footer-cta"]')))
+  except TimeoutException:
+    timeout_exception = True
+    timeout_exception1 = True
+  else :
+    timeout_exception = False
+    timeout_exception1 = False
+    submit_button = driver.find_element_by_xpath ('//*[@id="footer-cta"]')
+    submit_button.click()
+
 def output_save():
   entry_list = [[settings_data['first_name'], settings_data['last_name'], settings_data['registered_mobile_no'], settings_data['email_id'], settings_data['payable_amount'], input_workbook_cc_number[x], input_workbook_ipin[x], input_workbook_cvv_number[x], input_workbook_expiry_number[x], z+1, int(input_workbook_desk_number[x]), settings_data["desk_holder"]]]
   output_wb = load_workbook(output_sheet_file_path)
@@ -171,7 +209,7 @@ def whole_work():
     start_link()
     page_one()
     page_two()
-    time.sleep(100)
+    page_three()
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument("--incognito")
