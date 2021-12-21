@@ -110,11 +110,13 @@ def output_save():
 def whole_work():
     start_link()
 
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument("--incognito")
 caps = DesiredCapabilities().CHROME
 #caps["pageLoadStrategy"] = "none"
 #caps["pageLoadStrategy"] = "eager"
 caps["pageLoadStrategy"] = "normal"
-driver=webdriver.Chrome(desired_capabilities=caps, executable_path="chromedriver.exe")
+driver=webdriver.Chrome(chrome_options=chrome_options, desired_capabilities=caps, executable_path="chromedriver.exe")
 driver.maximize_window()
 try:
   cal()
