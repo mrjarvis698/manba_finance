@@ -99,6 +99,30 @@ def cc_expiry():
 def start_link():
   driver.get("https://mfq.manbafinance.com/paymentwebsite")
 
+def page_one():
+  # LAN Text Box
+  try :
+    WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="txtlanno"]')))
+  except TimeoutException:
+    timeout_exception = True
+    timeout_exception1 = True
+  else :
+    timeout_exception = False
+    timeout_exception1 = False
+    textbox_elements = driver.find_element_by_xpath ('//*[@id="txtlanno"]')
+    textbox_elements.send_keys(settings_data['LAN'])
+
+  # LAN Next Page
+  try :
+    WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="next"]')))
+  except TimeoutException:
+    timeout_exception = True
+    timeout_exception1 = True
+  else :
+    timeout_exception = False
+    page_button = driver.find_element_by_xpath ('//*[@id="next"]')
+    page_button.click()
+
 def output_save():
   entry_list = [[settings_data['first_name'], settings_data['last_name'], settings_data['registered_mobile_no'], settings_data['email_id'], settings_data['payable_amount'], input_workbook_cc_number[x], input_workbook_atm_pin[x], input_workbook_cvv_number[x], input_workbook_expiry_number[x], z+1, int(input_workbook_desk_number[x]), settings_data["desk_holder"]]]
   output_wb = load_workbook(output_sheet_file_path)
@@ -109,6 +133,7 @@ def output_save():
 
 def whole_work():
     start_link()
+    page_one()
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument("--incognito")

@@ -133,6 +133,3 @@ dmypy.json
 
 # cache
 cache/
-
-# json
-*.json
