@@ -10,7 +10,11 @@ from openpyxl.workbook import Workbook
 from openpyxl import load_workbook
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as ec
 import time
 
 root = tkinter.Tk()
@@ -106,7 +110,11 @@ def output_save():
 def whole_work():
     start_link()
 
-driver=webdriver.Chrome("chromedriver.exe")
+caps = DesiredCapabilities().CHROME
+#caps["pageLoadStrategy"] = "none"
+#caps["pageLoadStrategy"] = "eager"
+caps["pageLoadStrategy"] = "normal"
+driver=webdriver.Chrome(desired_capabilities=caps, executable_path="chromedriver.exe")
 driver.maximize_window()
 try:
   cal()
