@@ -124,7 +124,7 @@ def page_one():
     page_button.click()
 
 def output_save():
-  entry_list = [[settings_data['first_name'], settings_data['last_name'], settings_data['registered_mobile_no'], settings_data['email_id'], settings_data['payable_amount'], input_workbook_cc_number[x], input_workbook_atm_pin[x], input_workbook_cvv_number[x], input_workbook_expiry_number[x], z+1, int(input_workbook_desk_number[x]), settings_data["desk_holder"]]]
+  entry_list = [[settings_data['first_name'], settings_data['last_name'], settings_data['registered_mobile_no'], settings_data['email_id'], settings_data['payable_amount'], input_workbook_cc_number[x], input_workbook_ipin[x], input_workbook_cvv_number[x], input_workbook_expiry_number[x], z+1, int(input_workbook_desk_number[x]), settings_data["desk_holder"]]]
   output_wb = load_workbook(output_sheet_file_path)
   page = output_wb.active
   for info in entry_list:
