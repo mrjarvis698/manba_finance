@@ -340,9 +340,10 @@ def output():
 
     #driver.switch_to.frame(WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.CLASS_NAME, "razorpay-checkout-frame"))))
     try :
-      WebDriverWait(driver, timeout=3).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="checkout-parent"]/div[2]/div[2]/div')))
+      WebDriverWait(driver, timeout=3).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="app-container"]/div/div[2]/div[2]/div[1]/div/div[2]/div[1]/span/span')))
     except TimeoutException :
       try:
+        driver.switch_to.frame(WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.CLASS_NAME, "razorpay-checkout-frame"))))
         WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="fd-t"]')))
       except TimeoutException:
         timeout_exception = True
@@ -354,7 +355,7 @@ def output():
         timeout_exception1 = False
     else :
       output_status = "Success"
-      transaction_element = driver.find_element_by_xpath('//*[@id="checkout-parent"]/div[2]/div[2]/div')
+      transaction_element = driver.find_element_by_xpath('//*[@id="app-container"]/div/div[2]/div[2]/div[1]/div/div[3]/div')
       transaction_output_status = transaction_element.text
       timeout_exception = False
       timeout_exception1 = False
