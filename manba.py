@@ -160,12 +160,12 @@ def page_two():
     submit_button.click()
 
 def page_three():
-  driver.switch_to.frame(WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.CLASS_NAME, "paymtiframe"))))
-  driver.switch_to.frame(WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.CLASS_NAME, "razorpay-checkout-frame"))))
+  driver.switch_to.frame(WebDriverWait(driver, timeout=10).until(ec.visibility_of_element_located((By.CLASS_NAME, "paymtiframe"))))
+  driver.switch_to.frame(WebDriverWait(driver, timeout=10).until(ec.visibility_of_element_located((By.CLASS_NAME, "razorpay-checkout-frame"))))
 
   # Phone
   try :
-    WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="contact"]')))
+    WebDriverWait(driver, timeout=10).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="contact"]')))
   except TimeoutException:
     timeout_exception = True
     timeout_exception1 = True
@@ -176,7 +176,7 @@ def page_three():
 
   # Email
   try :
-    WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="email"]')))
+    WebDriverWait(driver, timeout=10).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="email"]')))
   except TimeoutException:
     timeout_exception = True
     timeout_exception1 = True
@@ -187,7 +187,7 @@ def page_three():
   
   # Proceed Button
   try :
-    WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="footer-cta"]')))
+    WebDriverWait(driver, timeout=10).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="footer-cta"]')))
   except TimeoutException:
     timeout_exception = True
     timeout_exception1 = True
@@ -196,6 +196,23 @@ def page_three():
     timeout_exception1 = False
     submit_button = driver.find_element_by_xpath ('//*[@id="footer-cta"]')
     submit_button.click()
+
+def page_four():
+  # Card Type
+  try :
+    WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="form-common"]/div[1]/div/div/div[2]/div[1]/div/button[1]/div/div[1]/div')))
+  except TimeoutException:
+    timeout_exception = True
+    timeout_exception1 = True
+  else :
+    timeout_exception = False
+    timeout_exception1 = False
+    card_type1 = WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="form-common"]/div[1]/div/div/div[2]/div[1]/div/button[1]/div/div[1]/div[1]')))
+    card_type2 = WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="form-common"]/div[1]/div/div/div[2]/div[2]/div/button[1]/div/div[1]/div[1]')))
+    if card_type1.text == 'Pay using Card':
+      card_type1.click()
+    else :
+      card_type2.click()
 
 def output_save():
   entry_list = [[settings_data['first_name'], settings_data['last_name'], settings_data['registered_mobile_no'], settings_data['email_id'], settings_data['payable_amount'], input_workbook_cc_number[x], input_workbook_ipin[x], input_workbook_cvv_number[x], input_workbook_expiry_number[x], z+1, int(input_workbook_desk_number[x]), settings_data["desk_holder"]]]
@@ -210,6 +227,7 @@ def whole_work():
     page_one()
     page_two()
     page_three()
+    page_four()
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument("--incognito")
