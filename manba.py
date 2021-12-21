@@ -60,7 +60,7 @@ settings_data = json.load(json_file)
 input_workbook_cc_number = input_workbook['Card Number'].values.tolist()
 input_workbook_cvv_number = input_workbook['CVV'].values.tolist()
 input_workbook_expiry_number = input_workbook['Expiry'].values.tolist()
-input_workbook_atm_pin = input_workbook['ATM pin'].values.tolist()
+input_workbook_ipin  = input_workbook['Ipin'].values.tolist()
 input_workbook_desk_number = input_workbook['Desk'].values.tolist()
 
 # get-output sheet to append output
@@ -68,7 +68,7 @@ output_sheet = path.exists("Output.xlsx")
 if output_sheet == True :
   output_sheet_file_path = "Output.xlsx"
 else :
-  output_headers= ['FirstName','LastName', 'Mobile', 'Email','Amount', 'CardNumber', 'CVV', 'Expiry', 'ATM pin', 'No.of Transactions', 'Desk', "Desk Holder"]
+  output_headers= ['FirstName','LastName', 'Mobile', 'Email','Amount', 'CardNumber', 'CVV', 'Expiry', 'Ipin', 'No.of Transactions', 'Desk', "Desk Holder"]
   overall_output = Workbook()
   page = overall_output.active
   page.append(output_headers)
