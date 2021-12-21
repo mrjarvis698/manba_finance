@@ -91,11 +91,18 @@ def cal():
 def cc_expiry():
   global expiry_month
   global expiry_year
+  global expiry_year1
+  global expiry_year2
+  global expiry_year3
+  global expiry_year4
   workbook_expiry_month = input_workbook_expiry_number[x]
   workbook_expiry_year = input_workbook_expiry_number[x]
   expiry_month = workbook_expiry_month[:2]
-  expiry_year = workbook_expiry_year[3:]
-
+  expiry_year = workbook_expiry_year[5:]
+  expiry_year1 = workbook_expiry_year[3]
+  expiry_year2 = workbook_expiry_year[4]
+  expiry_year3 = workbook_expiry_year[5]
+  expiry_year4 = workbook_expiry_year[6]
 def start_link():
   driver.get("https://mfq.manbafinance.com/paymentwebsite")
 
@@ -214,6 +221,64 @@ def page_four():
     else :
       card_type2.click()
 
+def page_five():
+  # CC number
+  try :
+    WebDriverWait(driver, timeout=10).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="card_number"]')))
+  except TimeoutException:
+    timeout_exception = True
+    timeout_exception1 = True
+  else :
+    timeout_exception = False
+    page_button = driver.find_element_by_xpath ('//*[@id="card_number"]')
+    page_button.send_keys(input_workbook_cc_number[x])
+  
+  # Expiry
+  cc_expiry()
+  try :
+    WebDriverWait(driver, timeout=10).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="card_expiry"]')))
+  except TimeoutException:
+    timeout_exception = True
+    timeout_exception1 = True
+  else :
+    timeout_exception = False
+    page_button = driver.find_element_by_xpath ('//*[@id="card_expiry"]')
+    page_button.send_keys(expiry_month + expiry_year3 + expiry_year4)
+  
+  # CC holder name
+  try :
+    WebDriverWait(driver, timeout=10).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="card_name"]')))
+  except TimeoutException:
+    timeout_exception = True
+    timeout_exception1 = True
+  else :
+    timeout_exception = False
+    page_button = driver.find_element_by_xpath ('//*[@id="card_name"]')
+    page_button.send_keys(settings_data['first_name'])
+  
+  # CVV
+  try :
+    WebDriverWait(driver, timeout=10).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="card_cvv"]')))
+  except TimeoutException:
+    timeout_exception = True
+    timeout_exception1 = True
+  else :
+    timeout_exception = False
+    page_button = driver.find_element_by_xpath ('//*[@id="card_cvv"]')
+    page_button.send_keys(input_workbook_cvv_number[x])
+  
+  # Proceed
+  try :
+    WebDriverWait(driver, timeout=10).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="footer-cta"]')))
+  except TimeoutException:
+    timeout_exception = True
+    timeout_exception1 = True
+  else :
+    timeout_exception = False
+    timeout_exception1 = False
+    submit_button = driver.find_element_by_xpath ('//*[@id="footer-cta"]')
+    submit_button.click()
+
 def output_save():
   entry_list = [[settings_data['first_name'], settings_data['last_name'], settings_data['registered_mobile_no'], settings_data['email_id'], settings_data['payable_amount'], input_workbook_cc_number[x], input_workbook_ipin[x], input_workbook_cvv_number[x], input_workbook_expiry_number[x], z+1, int(input_workbook_desk_number[x]), settings_data["desk_holder"]]]
   output_wb = load_workbook(output_sheet_file_path)
@@ -228,6 +293,8 @@ def whole_work():
     page_two()
     page_three()
     page_four()
+    page_five()
+    time.sleep(1000)
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument("--incognito")
