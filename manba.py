@@ -68,7 +68,7 @@ output_sheet = path.exists("Output.xlsx")
 if output_sheet == True :
   output_sheet_file_path = "Output.xlsx"
 else :
-  output_headers= ['LAN','FirstName','LastName', 'Mobile', 'Email','Amount', 'CardNumber', 'Ipin', 'CVV', 'Expiry', 'Status', 'Transation No', 'No.of Transactions', 'Desk', "Desk Holder"]
+  output_headers= ['LAN', 'Customer Name', 'Vehicle Number','FirstName','LastName', 'Mobile', 'Email','Amount', 'CardNumber', 'Ipin', 'CVV', 'Expiry', 'Status', 'Transation No', 'No.of Transactions', 'Desk', "Desk Holder"]
   overall_output = Workbook()
   page = overall_output.active
   page.append(output_headers)
@@ -79,10 +79,10 @@ def cal():
   global output_cc_number
   global done_transactions_wb_1
   global h
-  output_load_wb_2 = pd.read_excel(output_sheet_file_path, sheet_name = 'Sheet', usecols = 'G', dtype=str)
+  output_load_wb_2 = pd.read_excel(output_sheet_file_path, sheet_name = 'Sheet', usecols = 'I', dtype=str)
   output_load_wb_2.head()
   output_cc_number = output_load_wb_2['CardNumber'].values.tolist()
-  output_load_wb_1 = pd.read_excel(output_sheet_file_path, sheet_name = 'Sheet', usecols = 'M', dtype=int)
+  output_load_wb_1 = pd.read_excel(output_sheet_file_path, sheet_name = 'Sheet', usecols = 'O', dtype=int)
   output_load_wb_1.head()
   done_transactions_wb_1 = output_load_wb_1['No.of Transactions'].values.tolist()
   h = len(output_load_wb_1.index) - 1
@@ -131,6 +131,33 @@ def page_one():
     page_button.click()
 
 def page_two():
+  global customer_name
+  global customer_name_element
+  # Customer Name
+  try :
+    WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div/div/div[2]/div/input')))
+  except TimeoutException:
+    timeout_exception = True
+    timeout_exception1 = True
+  else :
+    timeout_exception = False
+    timeout_exception1 = False
+    customer_name = driver.find_element_by_xpath ('/html/body/div[1]/div/div/div[2]/div/input')
+    customer_name_element = customer_name.get_property("value")
+
+  # Vehicle Number
+  global vehicle_number
+  global vehicle_number_element
+  try :
+    WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div/div/div[3]/div/input')))
+  except TimeoutException:
+    timeout_exception = True
+    timeout_exception1 = True
+  else :
+    timeout_exception = False
+    timeout_exception1 = False
+    vehicle_number = driver.find_element_by_xpath ('/html/body/div[1]/div/div/div[3]/div/input')
+    vehicle_number_element = vehicle_number.get_property("value")
   # Select EMI Amount
   try :
     WebDriverWait(driver, timeout=8).until(ec.visibility_of_element_located((By.XPATH, '//*[@id="Other"]')))
@@ -373,7 +400,7 @@ def output():
     transaction_output_status = "-"
 
 def output_save():
-  entry_list = [[input_workbook_lan_number[x], settings_data['first_name'], settings_data['last_name'], settings_data['registered_mobile_no'], settings_data['email_id'], settings_data['payable_amount'], input_workbook_cc_number[x], input_workbook_ipin[x], input_workbook_cvv_number[x], input_workbook_expiry_number[x], output_status, transaction_output_status, z+1, int(input_workbook_desk_number[x]), settings_data["desk_holder"]]]
+  entry_list = [[input_workbook_lan_number[x], customer_name_element, vehicle_number_element,  settings_data['first_name'], settings_data['last_name'], settings_data['registered_mobile_no'], settings_data['email_id'], settings_data['payable_amount'], input_workbook_cc_number[x], input_workbook_ipin[x], input_workbook_cvv_number[x], input_workbook_expiry_number[x], output_status, transaction_output_status, z+1, int(input_workbook_desk_number[x]), settings_data["desk_holder"]]]
   output_wb = load_workbook(output_sheet_file_path)
   page = output_wb.active
   for info in entry_list:
