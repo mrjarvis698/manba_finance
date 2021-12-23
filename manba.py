@@ -47,7 +47,7 @@ else :
     outfile.write(json_object)
 
 # read imported xlsx file path using pandas
-input_workbook = pd.read_excel(xlsx_file_path, sheet_name = 'Sheet1', usecols = 'E:I', dtype=str)
+input_workbook = pd.read_excel(xlsx_file_path, sheet_name = 'Sheet1', usecols = 'E:J', dtype=str)
 input_workbook.head()
 
 # read total number of rows present in xlsx
@@ -56,7 +56,7 @@ number_of_rows = len(input_workbook.index)
 # Opening JSON file & returns JSON object as a dictionary
 json_file = open('settings.json')
 settings_data = json.load(json_file)
-
+input_workbook_lan_number = input_workbook['LAN'].values.tolist()
 input_workbook_cc_number = input_workbook['Card Number'].values.tolist()
 input_workbook_cvv_number = input_workbook['CVV'].values.tolist()
 input_workbook_expiry_number = input_workbook['Expiry'].values.tolist()
@@ -68,7 +68,7 @@ output_sheet = path.exists("Output.xlsx")
 if output_sheet == True :
   output_sheet_file_path = "Output.xlsx"
 else :
-  output_headers= ['FirstName','LastName', 'Mobile', 'Email','Amount', 'CardNumber', 'Ipin', 'CVV', 'Expiry', 'Status', 'Transation No', 'No.of Transactions', 'Desk', "Desk Holder"]
+  output_headers= ['LAN','FirstName','LastName', 'Mobile', 'Email','Amount', 'CardNumber', 'Ipin', 'CVV', 'Expiry', 'Status', 'Transation No', 'No.of Transactions', 'Desk', "Desk Holder"]
   overall_output = Workbook()
   page = overall_output.active
   page.append(output_headers)
@@ -79,10 +79,10 @@ def cal():
   global output_cc_number
   global done_transactions_wb_1
   global h
-  output_load_wb_2 = pd.read_excel(output_sheet_file_path, sheet_name = 'Sheet', usecols = 'F', dtype=str)
+  output_load_wb_2 = pd.read_excel(output_sheet_file_path, sheet_name = 'Sheet', usecols = 'G', dtype=str)
   output_load_wb_2.head()
   output_cc_number = output_load_wb_2['CardNumber'].values.tolist()
-  output_load_wb_1 = pd.read_excel(output_sheet_file_path, sheet_name = 'Sheet', usecols = 'L', dtype=int)
+  output_load_wb_1 = pd.read_excel(output_sheet_file_path, sheet_name = 'Sheet', usecols = 'M', dtype=int)
   output_load_wb_1.head()
   done_transactions_wb_1 = output_load_wb_1['No.of Transactions'].values.tolist()
   h = len(output_load_wb_1.index) - 1
@@ -117,7 +117,7 @@ def page_one():
     timeout_exception = False
     timeout_exception1 = False
     textbox_elements = driver.find_element_by_xpath ('//*[@id="txtlanno"]')
-    textbox_elements.send_keys(settings_data['LAN'])
+    textbox_elements.send_keys(input_workbook_lan_number[x])
 
   # LAN Next Page
   try :
@@ -373,7 +373,7 @@ def output():
     transaction_output_status = "-"
 
 def output_save():
-  entry_list = [[settings_data['first_name'], settings_data['last_name'], settings_data['registered_mobile_no'], settings_data['email_id'], settings_data['payable_amount'], input_workbook_cc_number[x], input_workbook_ipin[x], input_workbook_cvv_number[x], input_workbook_expiry_number[x], output_status, transaction_output_status, z+1, int(input_workbook_desk_number[x]), settings_data["desk_holder"]]]
+  entry_list = [[input_workbook_lan_number[x], settings_data['first_name'], settings_data['last_name'], settings_data['registered_mobile_no'], settings_data['email_id'], settings_data['payable_amount'], input_workbook_cc_number[x], input_workbook_ipin[x], input_workbook_cvv_number[x], input_workbook_expiry_number[x], output_status, transaction_output_status, z+1, int(input_workbook_desk_number[x]), settings_data["desk_holder"]]]
   output_wb = load_workbook(output_sheet_file_path)
   page = output_wb.active
   for info in entry_list:
